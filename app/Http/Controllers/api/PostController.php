@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Requests\StorePostRequest;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +14,10 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     function index(){
-        $posts = Post::paginate(5);
+        $posts = Post::with('user')->paginate(5);
         // $posts = Post::all();
 
-        return $posts;
+        return PostResource::collection($posts);
     }
 
       function store(StorePostRequest $request) {
@@ -42,7 +43,7 @@ class PostController extends Controller
 
     function show($id){
             $post = Post::find($id);
-            return $post;
+            return new PostResource($post);
     }
     function edit($id){
         $posts=Post::find($id);
