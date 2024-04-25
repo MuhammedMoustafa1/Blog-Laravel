@@ -42,14 +42,10 @@ class PostController extends Controller
 }
 
     function show($id){
-            $post = Post::find($id);
+            // $post = Post::find($id);
+            $post = Post::with('user')->findOrFail($id);
             return new PostResource($post);
     }
-    function edit($id){
-        $posts=Post::find($id);
-        return view("posts.edit" , ["posts"=>$posts]);
-
-}
    public function update(Request $request, $id)
 {
     $request->validate([
